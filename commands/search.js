@@ -11,24 +11,25 @@ const boxenOptions = {
   backgroundColor: "#555555",
 };
 
-const search = async (keyword) => {
+module.exports = async (query) => {
   try {
-    const options = yargs
-      .usage("Usage: -n <name>")
-      .option("s", { alias: "search", describe: "Search term", type: "string" }).argv;
+    const options = yargs.option("s", {
+      alias: "search",
+      describe: "Search term",
+      type: "string",
+      demandOption: true,
+    }).argv;
+    //   .option("a", {
+    //     alias: "add",
+    //     describe: "Add book to list",
+    //     type: "string",
+    //   }).argv;
 
     if (options.search) {
       const msg = chalk.white.bold(`
       Searching for books about ${options.search}...
         
-      Here are 5 books related to your search: 
-
-      If you want to save a book to your reading list,
-      use the following command and replace the last argument
-      with the ISBN number by copying and pasting:
-
-      books --save --isbn [BookISBN-Number]
-      `);
+      Results (5): `);
       const msgBox = boxen(msg, boxenOptions);
       console.log(msgBox);
     }
@@ -41,15 +42,18 @@ ${i + 1}
       Title: ${book.volumeInfo.title}
       Author(s): ${book.volumeInfo.authors}
       Publisher: ${book.volumeInfo.publisher}
-      ISBN: ${book.volumeInfo.industryIdentifiers[1].identifier}`);
+      ISBN: ${book.volumeInfo.industryIdentifiers[1].identifier}
+      `);
 
       const bookCard = boxen(bookInfo, boxenOptions);
       console.log(bookCard);
     });
+    return results;
   } catch (error) {
     console.error(error);
   }
 };
-search();
+// search();
 
-module.exports = search;
+// module.exports = search;
+// ISBN: ${book.volumeInfo.industryIdentifiers[1].identifier}
